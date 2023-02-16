@@ -13,7 +13,7 @@ const colors = {
   warn: 'yellow',
   info: 'green',
   http: 'magenta',
-  debug: 'white',
+  debug: 'blue',
 };
 
 // This method set the current severity based on
