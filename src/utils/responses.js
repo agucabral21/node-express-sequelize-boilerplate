@@ -1,7 +1,6 @@
-const errorResponse = ({ data = [], message = 'Some error ocurred.', errors = [] }) => ({
+const errorResponse = ({ message = 'Some error ocurred.', errors = [] }) => ({
   success: false,
   message,
-  data,
   errors,
 });
 
