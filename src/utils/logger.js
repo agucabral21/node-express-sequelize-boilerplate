@@ -32,7 +32,13 @@ winston.addColors(colors);
 
 const format = winston.format.combine(
   winston.format.timestamp({ format: 'DD-MM-YY HH:mm:ss:ms' }),
-  winston.format.printf((info) => `${info.timestamp} ${info.level}: ${info.message}`)
+  winston.format.errors({ stack: true }),
+  winston.format.printf((info) => {
+    if (info.level === 'error') {
+      return `${info.timestamp} ${info.level}: ${info.message}\n${info.stack}\n`;
+    }
+    return `${info.timestamp} ${info.level}: ${info.message}`;
+  })
 );
 
 const transports = [

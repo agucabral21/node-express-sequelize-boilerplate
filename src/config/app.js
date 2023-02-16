@@ -5,7 +5,7 @@ dotenv.config();
 
 const express = require('express');
 const APIv1 = require('../routes');
-const { morgan } = require('../middlewares');
+const { morgan, errorHandler } = require('../middlewares');
 
 const app = express();
 
@@ -17,5 +17,6 @@ app.use('/api/v1', APIv1);
 
 // Response for every other route not specified
 app.all('*', urlNotFound);
+app.use(errorHandler);
 
 module.exports = app;
