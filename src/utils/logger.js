@@ -1,4 +1,4 @@
-const winston = require('winston');
+const winston = require("winston");
 
 const levels = {
   error: 0,
@@ -9,11 +9,11 @@ const levels = {
 };
 
 const colors = {
-  error: 'red',
-  warn: 'yellow',
-  info: 'green',
-  http: 'magenta',
-  debug: 'blue',
+  error: "red",
+  warn: "yellow",
+  info: "green",
+  http: "magenta",
+  debug: "blue",
 };
 
 // This method set the current severity based on
@@ -21,9 +21,9 @@ const colors = {
 // if the server was run in development mode; otherwise,
 // if it was run in production, show only warn and error messages.
 const level = () => {
-  const env = process.env.NODE_ENV || 'development';
-  const isDevelopment = env === 'development';
-  return isDevelopment ? 'debug' : 'warn';
+  const env = process.env.NODE_ENV || "development";
+  const isDevelopment = env === "development";
+  return isDevelopment ? "debug" : "warn";
 };
 
 // Tell winston that you want to link the colors
@@ -31,10 +31,10 @@ const level = () => {
 winston.addColors(colors);
 
 const format = winston.format.combine(
-  winston.format.timestamp({ format: 'DD-MM-YY HH:mm:ss:ms' }),
+  winston.format.timestamp({ format: "DD-MM-YY HH:mm:ss:ms" }),
   winston.format.errors({ stack: true }),
   winston.format.printf((info) => {
-    if (info.level === 'error') {
+    if (info.level === "error") {
       return `${info.timestamp} ${info.level}: ${info.message}\n${info.stack}\n`;
     }
     return `${info.timestamp} ${info.level}: ${info.message}`;
@@ -46,11 +46,11 @@ const transports = [
     format: winston.format.colorize({ all: true }),
   }),
   new winston.transports.File({
-    filename: 'logs/error.log',
-    level: 'error',
+    filename: "logs/error.log",
+    level: "error",
   }),
   new winston.transports.File({
-    filename: 'logs/all.log',
+    filename: "logs/all.log",
   }),
 ];
 

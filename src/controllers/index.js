@@ -1,3 +1,3 @@
-const StatusController = require('./StatusController');
+const StatusController = require("./StatusController");
 
 module.exports = { StatusController };
