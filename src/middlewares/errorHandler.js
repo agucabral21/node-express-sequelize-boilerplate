@@ -1,8 +1,8 @@
-const { errorResponse } = require('../utils/responses');
-const { logger } = require('../utils');
+const { errorResponse } = require("../utils/responses");
+const { logger } = require("../utils");
 
 // Any error will be handled by this middleware
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res) => {
   const { message } = err;
 
   logger.error(err);

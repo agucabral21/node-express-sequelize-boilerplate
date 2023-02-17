@@ -1,5 +1,5 @@
-const { checkSchema, validationResult } = require('express-validator');
-const { errorResponse } = require('../utils/responses');
+const { checkSchema, validationResult } = require("express-validator");
+const { errorResponse } = require("../utils/responses");
 
 const schemaValidator = (schema) => async (req, res, next) => {
   // Run schema validation
@@ -10,7 +10,7 @@ const schemaValidator = (schema) => async (req, res, next) => {
   if (errors.isEmpty()) {
     return next();
   }
-  const message = 'Invalid data Found';
+  const message = "Invalid data Found";
 
   return res.status(400).json(errorResponse({ message, errors }));
 };
