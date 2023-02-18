@@ -2,11 +2,14 @@ const { sequelize } = require("./database");
 
 const { User } = sequelize.models;
 
-class UserService {
-  static async add(data) {
-    const user = await User.create(data);
-    return user;
-  }
+async function add(data) {
+  const user = await User.create(data);
+  return user;
 }
 
-module.exports = UserService;
+async function findById(id) {
+  const user = await User.findByPk(id);
+  return user;
+}
+
+module.exports = { add, findById };
