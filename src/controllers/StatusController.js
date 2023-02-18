@@ -1,4 +1,4 @@
-const { okResponse } = require("../utils/responses");
+const { okResponse } = require("../utils").responses;
 const { logger } = require("../utils");
 
 async function showStatus(req, res) {
