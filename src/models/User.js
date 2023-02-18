@@ -1,3 +1,5 @@
+const { hash } = require("bcrypt");
+
 const UserModel = (sequelize, DataTypes) => {
   const User = sequelize.define(
     "User",
@@ -27,6 +29,11 @@ const UserModel = (sequelize, DataTypes) => {
     },
     { timestamps: false }
   );
+
+  User.addHook("beforeSave", "encryptPassword", async (user) => {
+    const hashedPassword = await hash(user.password, 10);
+    user.password = hashedPassword; // eslint-disable-line no-param-reassign
+  });
 
   return User;
 };
