@@ -1,24 +1,27 @@
 /* eslint-disable no-plusplus */
 module.exports = {
-  roles: {
+  firstName: {
     in: ["body"],
-    isArray: { errorMessage: "Roles must be an array" },
-    isEmpty: { negated: true, errorMessage: "Roles cannot be empty" },
-    custom: {
-      options: (value) => {
-        if (Array.isArray(value)) {
-          for (let i = 0; i < value.length; i++) {
-            if (!Number.isInteger(value[i])) {
-              throw new Error("Roles must be an array of integers");
-            }
-          }
-        }
-        return true;
-      },
-    },
+    isEmpty: { negated: true, errorMessage: "firstName cannot be empty" },
+    isString: { errorMessage: "value must be a string" },
   },
-  id: {
-    in: ["params"],
-    isInt: { errorMessage: "id must be an integer" },
+  lastName: {
+    in: ["body"],
+    isEmpty: { negated: true, errorMessage: "lastName cannot be empty" },
+    isString: { errorMessage: "value must be a string" },
+  },
+  email: {
+    in: ["body"],
+    isEmpty: { negated: true, errorMessage: "email cannot be empty" },
+    isString: true,
+    isEmail: { errorMessage: "email must have valid format" },
+  },
+  password: {
+    in: ["body"],
+    isString: { errorMessage: "value must be a string" },
+    isLength: {
+      options: { min: 8 },
+      errorMessage: "password must have at least 8 characters",
+    },
   },
 };
