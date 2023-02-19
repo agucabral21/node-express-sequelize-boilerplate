@@ -6,13 +6,15 @@ const schemaValidator = (schema) => async (req, res, next) => {
   const validations = checkSchema(schema);
   await Promise.all(validations.map((validation) => validation.run(req)));
   // Check errors
-  const errors = validationResult(req);
-  if (errors.isEmpty()) {
+  const result = validationResult(req);
+  if (result.isEmpty()) {
     return next();
   }
   const message = "Invalid data Found";
 
-  return res.status(400).json(errorResponse({ message, errors }));
+  return res
+    .status(400)
+    .json(errorResponse({ message, errors: result.errors }));
 };
 
 module.exports = schemaValidator;

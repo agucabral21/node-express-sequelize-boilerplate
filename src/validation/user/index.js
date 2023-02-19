@@ -1,3 +1,4 @@
+const addRole = require("./addRole");
 const add = require("./add");
 
-module.exports = { add };
+module.exports = { addRole, add };
