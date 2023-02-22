@@ -1,4 +1,3 @@
-/* eslint-disable no-plusplus */
 module.exports = {
   name: {
     in: ["body"],
