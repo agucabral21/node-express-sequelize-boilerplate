@@ -17,6 +17,11 @@ async function findById(id) {
   return user;
 }
 
+async function findByEmail(email) {
+  const user = await User.findOne({ where: { email } });
+  return user;
+}
+
 async function addRoles(userId, rolesIds) {
   try {
     const user = await findById(userId);
@@ -30,4 +35,17 @@ async function addRoles(userId, rolesIds) {
   return false;
 }
 
-module.exports = { create, findById, addRoles };
+async function getRoles(userId) {
+  try {
+    const user = await findById(userId);
+    if (user) {
+      const roles = await user.getRoles();
+      return roles;
+    }
+  } catch (err) {
+    throw ErrorParser(err);
+  }
+  return false;
+}
+
+module.exports = { create, findById, addRoles, findByEmail, getRoles };
