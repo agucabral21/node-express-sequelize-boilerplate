@@ -1,21 +1,19 @@
 const request = require("supertest");
 const app = require("../../src/config/app");
-const { User, sequelize } = require("../../src/services/database");
+const { UserService, RoleService } = require("../../src/services");
+const { sequelize } = require("../../src/services/database");
+const { truncateDB } = require("../utils");
 
 beforeAll(async () => {
   await sequelize.sync();
 });
 
 afterEach(async () => {
-  await User.destroy({
-    truncate: { cascade: true, restartIdentity: true },
-  });
+  await truncateDB();
 });
 
 afterAll(async () => {
-  await User.destroy({
-    truncate: { cascade: true, restartIdentity: true },
-  });
+  await truncateDB();
 
   await sequelize.close();
 });
@@ -112,5 +110,66 @@ describe("Test POST /api/v1/users", () => {
     expect(response.body.errors[0].param).toBe("firstName");
     expect(response.body.errors[0].location).toBe("body");
     expect(response.body.errors[0].msg).toBe("value must be a string");
+  });
+});
+
+describe("Test POST /api/v1/users/:id/roles", () => {
+  test("Should add a role to a user correctly", async () => {
+    const userData = {
+      firstName: "Agustin",
+      lastName: "Cabral",
+      email: "agucabral@gmail.com",
+      password: "aguscali21",
+    };
+    const user = await UserService.create(userData);
+    const role = await RoleService.create({ name: "admin" });
+    const rolesRequestBody = { roles: [role.id] };
+    const response = await request(app)
+      .post(`/api/v1/users/${user.id}/roles`)
+      .set("Accept", "application/json")
+      .send(rolesRequestBody)
+      .then((res) => res);
+    expect(response.statusCode).toBe(200);
+    await user.reload();
+    const userRoles = await user.getRoles();
+    expect(userRoles[0].name).toBe(role.name);
+  });
+
+  test("Should return 400 for non existing role", async () => {
+    const userData = {
+      firstName: "Agustin",
+      lastName: "Cabral",
+      email: "agucabral@gmail.com",
+      password: "aguscali21",
+    };
+    const user = await UserService.create(userData);
+    const rolesRequestBody = { roles: [5] };
+    const response = await request(app)
+      .post(`/api/v1/users/${user.id}/roles`)
+      .set("Accept", "application/json")
+      .send(rolesRequestBody)
+      .then((res) => res);
+    expect(response.statusCode).toBe(400);
+    expect(response.body.message).toBe("Some roles are invalid, please check");
+  });
+  test("Should return 400 for invalid role body", async () => {
+    const userData = {
+      firstName: "Agustin",
+      lastName: "Cabral",
+      email: "agucabral@gmail.com",
+      password: "aguscali21",
+    };
+    const user = await UserService.create(userData);
+    const rolesRequestBody = { roles: "1" };
+    const response = await request(app)
+      .post(`/api/v1/users/${user.id}/roles`)
+      .set("Accept", "application/json")
+      .send(rolesRequestBody)
+      .then((res) => res);
+
+    expect(response.statusCode).toBe(400);
+    expect(response.body.message).toBe("Invalid data.");
+    expect(response.body.errors[0].param).toBe("roles");
+    expect(response.body.errors[0].msg).toBe("Roles must be an array");
   });
 });

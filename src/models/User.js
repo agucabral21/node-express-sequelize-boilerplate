@@ -1,4 +1,4 @@
-const { hash } = require("bcrypt");
+const { hash, compare } = require("bcrypt");
 
 const UserModel = (sequelize, DataTypes) => {
   const User = sequelize.define(
@@ -27,8 +27,20 @@ const UserModel = (sequelize, DataTypes) => {
         allowNull: false,
       },
     },
-    { timestamps: false }
+    {
+      timestamps: false,
+      indexes: [
+        {
+          unique: true,
+          fields: ["email"],
+        },
+      ],
+    }
   );
+
+  User.prototype.validPassword = async function validPassword(password) {
+    return compare(password, this.password);
+  };
 
   User.addHook("beforeSave", "encryptPassword", async (user) => {
     const hashedPassword = await hash(user.password, 10);

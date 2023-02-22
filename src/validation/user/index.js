@@ -1,4 +1,4 @@
 const addRole = require("./addRole");
-const add = require("./add");
+const create = require("./create");
 
-module.exports = { addRole, add };
+module.exports = { addRole, create };
