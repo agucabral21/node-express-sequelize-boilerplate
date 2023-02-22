@@ -1,10 +1,10 @@
 const { okResponse, errorResponse } = require("../utils").responses;
 const { UserService, RoleService } = require("../services");
 
-async function add(req, res) {
+async function create(req, res) {
   const { firstName, lastName, email, password } = req.body;
   const userData = { firstName, lastName, email, password };
-  const user = await UserService.add(userData);
+  const user = await UserService.create(userData);
   const data = {
     id: user.id,
     firstName: user.firstName,
@@ -26,10 +26,20 @@ async function addRoles(req, res) {
   const filters = { id: rolesIds };
 
   const roles = await RoleService.findAll(filters);
+  if (roles.length !== rolesIds.length)
+    return res
+      .status(400)
+      .send(errorResponse({ message: "Some roles are invalid, please check" }));
 
-  await user.addRoles(roles);
+  const result = await UserService.addRoles(user.id, rolesIds);
 
-  return res.status(200).send(okResponse({}));
+  if (result) return res.status(200).send(okResponse({}));
+
+  return res.status(500).send(
+    errorResponse({
+      message: "An unexpected error ocurred and roles where not assigned.",
+    })
+  );
 }
 
-module.exports = { add, addRoles };
+module.exports = { create, addRoles };

@@ -2,9 +2,9 @@ const router = require("express").Router();
 const { UserController } = require("../controllers");
 const { catchAsync } = require("../utils");
 const { schemaValidator } = require("../middlewares");
-const { addRole, add } = require("../validation/user");
+const { addRole, create } = require("../validation/user");
 
-router.post("/", schemaValidator(add), catchAsync(UserController.add));
+router.post("/", schemaValidator(create), catchAsync(UserController.create));
 
 router.post(
   "/:id/roles",

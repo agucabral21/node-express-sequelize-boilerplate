@@ -1,8 +1,5 @@
 const request = require("supertest");
-const dotenv = require("dotenv");
 const { app } = require("../../src/config");
-
-dotenv.config();
 
 describe("Test status endpoint.", () => {
   test("It should show service status.", (done) => {
