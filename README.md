@@ -1,4 +1,4 @@
-# node-express-boilerplate
+# node-express-sequelize-boilerplate
 
 Basic Rest API node project
 
