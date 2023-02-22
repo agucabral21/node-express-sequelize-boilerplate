@@ -10,7 +10,7 @@ const schemaValidator = (schema) => async (req, res, next) => {
   if (result.isEmpty()) {
     return next();
   }
-  const message = "Invalid data Found";
+  const message = "Invalid data.";
 
   return res
     .status(400)
