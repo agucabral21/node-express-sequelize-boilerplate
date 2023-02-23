@@ -1,9 +1,9 @@
 const dotenv = require("dotenv");
 
 dotenv.config();
-const { sequelize } = require("../../src/services/database");
-const { RoleService } = require("../../src/services");
-const { truncateDB } = require("../utils");
+const { sequelize } = require("../../../src/services/database");
+const { RoleService } = require("../../../src/services");
+const { truncateDB } = require("../../utils");
 
 beforeAll(async () => {
   await sequelize.sync();
@@ -29,7 +29,6 @@ describe("addRole tests", () => {
     };
     const createdRole = await RoleService.create(roleData);
     expect(createdRole.name).toBe(roleData.name);
-    expect();
   });
   test("should throw error for invalid data", async () => {
     try {
