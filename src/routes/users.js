@@ -1,14 +1,8 @@
 const router = require("express").Router();
 const { UserController } = require("../controllers");
 const { catchAsync } = require("../utils");
-const {
-  schemaValidator,
-  authMiddleware,
-  tokenValidation,
-} = require("../middlewares");
+const { schemaValidator, authMiddleware } = require("../middlewares");
 const { addRole, create } = require("../validation/user");
-
-router.use(tokenValidation);
 
 router.post(
   "/",
