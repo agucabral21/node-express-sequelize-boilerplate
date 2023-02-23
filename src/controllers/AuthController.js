@@ -1,4 +1,4 @@
-const { generateToken } = require("../utils/jwt-generator");
+const { generateToken } = require("../utils/jwtGenerator");
 const { UserService } = require("../services");
 const { errorResponse, okResponse } = require("../utils/responses");
 
