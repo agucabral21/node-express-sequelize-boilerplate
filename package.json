@@ -6,13 +6,21 @@
   "scripts": {
     "start": "NODE_ENV=development nodemon src/server.js",
     "test": "NODE_ENV=test jest -i --testTimeout=10000",
-    "coverage": "jest --testTimeout=50000 --coverage",
+    "coverage": "jest -i --testTimeout=50000 --coverage",
     "prepare": "husky install",
     "eslint": "eslint \"**/*.js\""
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/agucabral21/node-express-sequelize-boilerplate.git"
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/tests/utils.js"
+    ],
+    "modulePaths": [
+      "<rootDir>/tests/utils.js"
+    ]
   },
   "keywords": [
     "boilerplate"
