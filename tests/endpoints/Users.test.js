@@ -2,9 +2,15 @@ const request = require("supertest");
 const app = require("../../src/config/app");
 const { UserService, RoleService } = require("../../src/services");
 const { sequelize } = require("../../src/services/database");
-const { truncateDB } = require("../utils");
+const { truncateDB, getToken } = require("../utils");
+
+let adminToken;
+let userToken;
 
 beforeAll(async () => {
+  adminToken = await getToken(1, ["admin"]);
+  userToken = await getToken(1, ["user"]);
+
   await sequelize.sync();
 });
 
@@ -29,12 +35,31 @@ describe("Test POST /api/v1/users", () => {
     const response = await request(app)
       .post("/api/v1/users")
       .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${adminToken}`)
       .send(userData)
       .then((res) => res);
     expect(response.statusCode).toBe(200);
     expect(response.body.data.firstName).toBe(userData.firstName);
   });
 
+  test("Should return 401 for unauthorized user ", async () => {
+    const userData = {
+      firstName: "Agustin",
+      lastName: "Cabral",
+      email: "agucabral@gmail.com",
+      password: "aguscali21",
+    };
+    const response = await request(app)
+      .post("/api/v1/users")
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${userToken}`)
+      .send(userData)
+      .then((res) => res);
+    expect(response.statusCode).toBe(401);
+    expect(response.body.message).toBe(
+      "Unauthorized, you don't have required roles for this action."
+    );
+  });
   test("Should return 400 for invalid email format", async () => {
     const userData = {
       firstName: "Agustin",
@@ -45,6 +70,7 @@ describe("Test POST /api/v1/users", () => {
     const response = await request(app)
       .post("/api/v1/users")
       .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${adminToken}`)
       .send(userData)
       .then((res) => res);
 
@@ -63,6 +89,7 @@ describe("Test POST /api/v1/users", () => {
     const response = await request(app)
       .post("/api/v1/users")
       .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${adminToken}`)
       .send(userData)
       .then((res) => res);
 
@@ -82,6 +109,7 @@ describe("Test POST /api/v1/users", () => {
     const response = await request(app)
       .post("/api/v1/users")
       .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${adminToken}`)
       .send(userData)
       .then((res) => res);
 
@@ -103,6 +131,7 @@ describe("Test POST /api/v1/users", () => {
     const response = await request(app)
       .post("/api/v1/users")
       .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${adminToken}`)
       .send(userData)
       .then((res) => res);
 
@@ -127,6 +156,7 @@ describe("Test POST /api/v1/users/:id/roles", () => {
     const response = await request(app)
       .post(`/api/v1/users/${user.id}/roles`)
       .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${adminToken}`)
       .send(rolesRequestBody)
       .then((res) => res);
     expect(response.statusCode).toBe(200);
@@ -147,11 +177,13 @@ describe("Test POST /api/v1/users/:id/roles", () => {
     const response = await request(app)
       .post(`/api/v1/users/${user.id}/roles`)
       .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${adminToken}`)
       .send(rolesRequestBody)
       .then((res) => res);
     expect(response.statusCode).toBe(400);
     expect(response.body.message).toBe("Some roles are invalid, please check");
   });
+
   test("Should return 400 for invalid role body", async () => {
     const userData = {
       firstName: "Agustin",
@@ -164,6 +196,7 @@ describe("Test POST /api/v1/users/:id/roles", () => {
     const response = await request(app)
       .post(`/api/v1/users/${user.id}/roles`)
       .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${adminToken}`)
       .send(rolesRequestBody)
       .then((res) => res);
 

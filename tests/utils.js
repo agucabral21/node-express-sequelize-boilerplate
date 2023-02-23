@@ -1,4 +1,5 @@
 const { User, Role } = require("../src/services").database;
+const { jwtGenerator } = require("../src/utils");
 
 async function truncateDB() {
   await User.destroy({
@@ -9,4 +10,10 @@ async function truncateDB() {
   });
 }
 
-module.exports = { truncateDB };
+async function getToken(id, roles = []) {
+  const userPayload = { user: { id, roles } };
+  const token = await jwtGenerator.generateToken(userPayload);
+  return token;
+}
+
+module.exports = { truncateDB, getToken };

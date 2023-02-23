@@ -1,9 +1,9 @@
 const dotenv = require("dotenv");
 
 dotenv.config();
-const { sequelize } = require("../../src/services").database;
-const { UserService, RoleService } = require("../../src/services");
-const { truncateDB } = require("../utils");
+const { sequelize } = require("../../../src/services").database;
+const { UserService, RoleService } = require("../../../src/services");
+const { truncateDB } = require("../../utils");
 
 beforeAll(async () => {
   await sequelize.sync();
@@ -34,7 +34,6 @@ describe("addUser tests", () => {
     expect(createdUser.email).toBe(userData.email);
     const validatePassword = createdUser.validPassword(userData.password);
     expect(validatePassword).toBeTruthy();
-    expect();
   });
   test("should throw error for invalid data", async () => {
     try {
