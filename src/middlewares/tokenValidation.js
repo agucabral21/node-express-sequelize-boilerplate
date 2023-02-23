@@ -23,4 +23,4 @@ const tokenValidation = (req, res, next) => {
   }
 };
 
-module.exports = { tokenValidation };
+module.exports = tokenValidation;
