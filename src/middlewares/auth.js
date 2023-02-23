@@ -6,7 +6,7 @@ const authMiddleware =
     let authenticated = false;
     if (req.tokenPayload?.user?.roles) {
       const { user } = req.tokenPayload;
-      authenticated = !user.roles.some((r) => !roles.includes(r));
+      authenticated = !roles.some((r) => !user.roles.includes(r));
     }
     if (!authenticated) {
       return res.status(401).json(
