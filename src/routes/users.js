@@ -18,4 +18,6 @@ router.post(
   catchAsync(UserController.addRoles)
 );
 
+router.get("/", authMiddleware(["admin"]), catchAsync(UserController.findAll));
+
 module.exports = router;

@@ -12,6 +12,11 @@ async function create(data) {
   }
 }
 
+async function findAll(filters) {
+  const user = await User.findAll({ where: filters });
+  return user;
+}
+
 async function findById(id) {
   const user = await User.findByPk(id);
   return user;
@@ -48,4 +53,4 @@ async function getRoles(userId) {
   return false;
 }
 
-module.exports = { create, findById, addRoles, findByEmail, getRoles };
+module.exports = { create, findById, addRoles, findByEmail, getRoles, findAll };

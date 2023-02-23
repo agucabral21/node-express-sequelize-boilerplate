@@ -1,6 +1,11 @@
 const { okResponse, errorResponse } = require("../utils").responses;
 const { UserService, RoleService } = require("../services");
 
+async function findAll(req, res) {
+  const users = await UserService.findAll();
+  return res.status(200).send(okResponse({ data: users }));
+}
+
 async function create(req, res) {
   const { firstName, lastName, email, password } = req.body;
   const userData = { firstName, lastName, email, password };
@@ -42,4 +47,4 @@ async function addRoles(req, res) {
   );
 }
 
-module.exports = { create, addRoles };
+module.exports = { findAll, create, addRoles };
