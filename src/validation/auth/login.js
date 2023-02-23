@@ -2,7 +2,8 @@ module.exports = {
   email: {
     in: ["body"],
     isEmpty: { negated: true, errorMessage: "email cannot be empty" },
-    isString: { errorMessage: "email must be a string" },
+    isString: true,
+    isEmail: { errorMessage: "email must have valid format" },
   },
   password: {
     in: ["body"],
