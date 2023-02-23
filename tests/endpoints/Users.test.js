@@ -24,6 +24,44 @@ afterAll(async () => {
   await sequelize.close();
 });
 
+describe("Test GET /api/v1/users", () => {
+  test("Should get all users correctly", async () => {
+    const userData = {
+      firstName: "Agustin",
+      lastName: "Cabral",
+      email: "agucabral@gmail.com",
+      password: "aguscali21",
+    };
+    const userData2 = {
+      firstName: "Agustin",
+      lastName: "Cabral",
+      email: "agucabral2@gmail.com",
+      password: "aguscali21",
+    };
+    await UserService.create(userData);
+
+    await UserService.create(userData2);
+
+    const response = await request(app)
+      .get("/api/v1/users")
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .then((res) => res);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.data.length).toBe(2);
+  });
+
+  test("Should return empty result", async () => {
+    const response = await request(app)
+      .get("/api/v1/users")
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .then((res) => res);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.data.length).toBe(0);
+  });
+});
+
 describe("Test POST /api/v1/users", () => {
   test("Should add a user correctly", async () => {
     const userData = {
