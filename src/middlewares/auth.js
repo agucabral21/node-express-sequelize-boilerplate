@@ -4,7 +4,7 @@ const authMiddleware =
   (roles = []) =>
   (req, res, next) => {
     let authenticated = false;
-    if (req.tokenPayload.user?.roles) {
+    if (req.tokenPayload?.user?.roles) {
       const { user } = req.tokenPayload;
       authenticated = !user.roles.some((r) => !roles.includes(r));
     }

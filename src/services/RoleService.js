@@ -3,7 +3,7 @@ const ErrorParser = require("../errors/ErrorParser");
 
 const { Role } = sequelize.models;
 
-async function findAll(filters) {
+async function findAll(filters = {}) {
   const roles = await Role.findAll({ where: filters });
   return roles;
 }

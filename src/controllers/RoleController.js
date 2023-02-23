@@ -7,4 +7,9 @@ async function create(req, res) {
   return res.status(200).send(okResponse({ data: role }));
 }
 
-module.exports = { create };
+async function findAll(req, res) {
+  const roles = await RoleService.findAll();
+  return res.status(200).send(okResponse({ data: roles }));
+}
+
+module.exports = { create, findAll };
