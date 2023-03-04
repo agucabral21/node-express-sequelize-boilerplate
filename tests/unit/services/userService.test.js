@@ -66,7 +66,7 @@ describe("addUser tests", () => {
   });
 });
 
-describe("Test findById", () => {
+describe("findById test ", () => {
   test("should find existing", async () => {
     const userData = {
       firstName: "Agu",

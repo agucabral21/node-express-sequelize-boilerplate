@@ -62,6 +62,49 @@ describe("Test GET /api/v1/users", () => {
   });
 });
 
+describe("Test GET /api/v1/users/:id", () => {
+  test("Should get existing user", async () => {
+    const userData = {
+      firstName: "Agustin",
+      lastName: "Cabral",
+      email: "agucabral@gmail.com",
+      password: "aguscali21",
+    };
+
+    const user = await UserService.create(userData);
+
+    const response = await request(app)
+      .get(`/api/v1/users/${user.id}`)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .then((res) => res);
+    expect(response.statusCode).toBe(200);
+    expect(response.body.data.firstName).toBe(userData.firstName);
+  });
+
+  test("Should return 404 for no existing user", async () => {
+    const response = await request(app)
+      .get("/api/v1/users/20")
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .then((res) => res);
+    expect(response.statusCode).toBe(404);
+    expect(response.body.message).toBe("User not found.");
+  });
+
+  test("Should return 400 for bad request", async () => {
+    const response = await request(app)
+      .get("/api/v1/users/asd")
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .then((res) => res);
+    expect(response.statusCode).toBe(400);
+    expect(response.body.message).toBe("Invalid data.");
+    expect(response.body.errors[0].location).toBe("params");
+    expect(response.body.errors[0].msg).toBe("id must be an integer");
+  });
+});
+
 describe("Test POST /api/v1/users", () => {
   test("Should add a user correctly", async () => {
     const userData = {
