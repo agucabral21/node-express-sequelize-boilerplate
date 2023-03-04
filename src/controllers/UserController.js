@@ -6,6 +6,22 @@ async function findAll(req, res) {
   return res.status(200).send(okResponse({ data: users }));
 }
 
+async function findById(req, res) {
+  const { id } = req.params;
+  const user = await UserService.findById(id);
+
+  if (!user)
+    return res.status(404).send(okResponse({ message: "User not found." }));
+
+  const data = {
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+  };
+  return res.status(200).send(okResponse({ data }));
+}
+
 async function create(req, res) {
   const { firstName, lastName, email, password } = req.body;
   const userData = { firstName, lastName, email, password };
@@ -47,4 +63,4 @@ async function addRoles(req, res) {
   );
 }
 
-module.exports = { findAll, create, addRoles };
+module.exports = { findAll, create, addRoles, findById };

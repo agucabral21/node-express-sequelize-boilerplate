@@ -2,7 +2,16 @@ const router = require("express").Router();
 const { UserController } = require("../controllers");
 const { catchAsync } = require("../utils");
 const { schemaValidator, authMiddleware } = require("../middlewares");
-const { addRole, create } = require("../validation/user");
+const { addRole, create, findById } = require("../validation/user");
+
+router.get("/", authMiddleware(["admin"]), catchAsync(UserController.findAll));
+
+router.get(
+  "/:id",
+  authMiddleware(["admin"]),
+  schemaValidator(findById),
+  catchAsync(UserController.findById)
+);
 
 router.post(
   "/",
@@ -17,7 +26,5 @@ router.post(
   schemaValidator(addRole),
   catchAsync(UserController.addRoles)
 );
-
-router.get("/", authMiddleware(["admin"]), catchAsync(UserController.findAll));
 
 module.exports = router;
